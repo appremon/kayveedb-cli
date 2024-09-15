@@ -7,8 +7,22 @@ import (
 	"strings"
 )
 
+// ClientInterface defines the interface for client methods
+type ClientInterface interface {
+	SendCommand(cmd, hostname, port string) (string, error)
+	Authenticate(username, password, database, hostname, port string) error
+}
+
+// RealClient is the actual client that implements ClientInterface
+type RealClient struct{}
+
+// NewClient returns a new instance of RealClient
+func NewClient() ClientInterface {
+	return &RealClient{}
+}
+
 // Authenticate sends the login request to the server
-func Authenticate(username, password, database, hostname, port string) error {
+func (rc *RealClient) Authenticate(username, password, database, hostname, port string) error {
 	conn, err := net.Dial("tcp", hostname+":"+port)
 	if err != nil {
 		return fmt.Errorf("failed to connect to %s:%s: %v", hostname, port, err)
@@ -35,7 +49,7 @@ func Authenticate(username, password, database, hostname, port string) error {
 }
 
 // SendCommand sends a command to the server and returns the response
-func SendCommand(cmd, hostname, port string) (string, error) {
+func (rc *RealClient) SendCommand(cmd, hostname, port string) (string, error) {
 	conn, err := net.Dial("tcp", hostname+":"+port)
 	if err != nil {
 		return "", fmt.Errorf("failed to connect to %s:%s: %v", hostname, port, err)
