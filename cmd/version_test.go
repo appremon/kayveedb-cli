@@ -19,6 +19,6 @@ func TestVersionCmd(t *testing.T) {
 	assert.Nil(t, err)
 
 	// Check the output
-	expected := "kvdbcli version: v1.0.2\n"
+	expected := "kvdbcli version: v1.0.3\n"
 	assert.Equal(t, expected, buf.String())
 }

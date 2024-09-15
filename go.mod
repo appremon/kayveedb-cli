@@ -1,4 +1,4 @@
-module github.com/rickcollette/kayveedb-cli
+module github.com/appremon/kayveedb-cli
 
 go 1.22.4
 
