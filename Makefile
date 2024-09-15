@@ -1,5 +1,6 @@
 # Variables
 APP_NAME := kayveedb-cli
+TOOLS_DIR := tools
 BIN_DIR := bin
 VERSION_FILE := VERSION
 VERSION_GO := cmd/version.go
@@ -13,13 +14,24 @@ VERSION_MINOR := $(word 2, $(subst ., ,$(CURRENT_VERSION)))
 VERSION_PATCH := $(word 3, $(subst ., ,$(CURRENT_VERSION)))
 
 # Default target
-all: build
+all: build build-tools
 
 # Build the main application
 build: 
 	@echo "Building $(APP_NAME)..."
 	@go build -o $(BIN_DIR)/$(APP_NAME) main.go
 	@echo "$(APP_NAME) built successfully."
+
+# Traverse the tools directory and build each tool
+build-tools:
+	@echo "Building tools..."
+	@mkdir -p $(BIN_DIR)
+	@find $(TOOLS_DIR) -type f -name "main.go" | while read -r tool; do \
+		TOOL_NAME=$$(dirname $$tool | xargs basename); \
+		echo "Building $$TOOL_NAME..."; \
+		go build -o $(BIN_DIR)/$$TOOL_NAME $$tool; \
+		echo "$$TOOL_NAME built successfully."; \
+	done
 
 # Run tests
 test:
@@ -35,7 +47,7 @@ clean:
 # Lint the code (requires golangci-lint to be installed)
 lint:
 	@echo "Linting code..."
-	@golangci-lint run
+	@~/go/bin/golangci-lint run
 
 # Push version to GitHub (for use with your pushversion.sh script)
 push:
@@ -70,7 +82,7 @@ check-versions:
 	echo "cmd/version_test.go: $$VERSION_TEST_FILE" && \
 	README_VERSION=$$(grep -o 'Current version: \*\*v[0-9]\+\.[0-9]\+\.[0-9]\+\*\*' $(README_FILE) | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | tr -d '[:space:]') && \
 	echo "README.md: $$README_VERSION"
-	
+
 # Update the version in kayveedb.go and version_test.go
 update-version-go:
 	@echo "Updating version in $(VERSION_GO)"

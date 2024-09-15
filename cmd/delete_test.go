@@ -3,7 +3,7 @@ package cmd
 import (
 	"testing"
 
-	"github.com/rickcollette/kayveedb-cli/mocks"
+	"github.com/appremon/kayveedb-cli/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,11 +14,11 @@ func TestDeleteCommand(t *testing.T) {
 	// Set up mock expectations
 	mockClient.On("SendCommand", "delete key", "localhost", "3466").Return("Delete successful", nil)
 
+	// Set the key variable to avoid nil pointer dereference
+	key = "key"
+
 	// Create the delete command with the mock client
 	deleteCmd := DeleteCmd(mockClient)
-
-	// Set the flags for the delete command
-	deleteCmd.Flags().Set("key", "key")
 
 	// Execute the command
 	err := deleteCmd.RunE(deleteCmd, []string{})

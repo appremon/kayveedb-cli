@@ -1,6 +1,6 @@
 package main
 
-import "github.com/rickcollette/kayveedb-cli/cmd"
+import "github.com/appremon/kayveedb-cli/cmd"
 
 func main() {
 	cmd.Execute()

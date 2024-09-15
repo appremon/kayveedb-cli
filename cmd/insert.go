@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/rickcollette/kayveedb-cli/client"
+	"github.com/appremon/kayveedb-cli/client"
 	"github.com/spf13/cobra"
 )
 

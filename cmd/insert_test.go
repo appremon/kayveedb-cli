@@ -3,7 +3,7 @@ package cmd
 import (
 	"testing"
 
-	"github.com/rickcollette/kayveedb-cli/mocks"
+	"github.com/appremon/kayveedb-cli/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
